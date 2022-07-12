@@ -1,16 +1,30 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
 INFINITY = 2**50
 
 class Graph:
-    def __init__(self, n: int):
-        self.vertices = n
+    def __init__(self, data_path="data.csv"):
+        data = pd.read_csv(data_path, names=['LATITUD', 'LONGITUD'], sep=",", comment="#")
+        graph_data = tuple(zip(data['LATITUD'].values, data['LONGITUD'].values))
+
+        self.vertices = int(data.size/2) #It is a tuple, so data is 2n but the vertex count is n
         self.positions = {int:[float, float]}
         self.edges = {int:list[int]}
         self.weight = {int:{int:int}}
 
-        for i in range(1,n+1):
-            self.edges.update({i:[]})
-            for j in range(1,n+1):
-                self.weight.update({i:{j:INFINITY}})
+        self.vertex_coord = {int:(float,float)}
+
+        #Based on the data(pos) in the csv file, we can know how many vertices there are, their positions and initislize
+        #both the adjacency list and the weight matrix.
+        index = 1
+        for d in graph_data:
+            self.edges.update({index:[]})
+            self.vertex_coord[index] = d
+            for j in range(1, self.vertices+1):
+                self.weight.update({index:{j:INFINITY}})
+            index = index + 1
     
     def set_edge(self, v0: int, vf: int, w: int):
         self.edges[v0].append(vf)
@@ -18,6 +32,9 @@ class Graph:
     
     def set_node_pos(self, index: int, x: float, y:float):
         self.positions[index] = [x, y]
+
+    def set_vertex_coord(self, index, pos: tuple[float,float]):
+        self.vertex_coord.update({index:pos})
 
 #FIXME: Returns euclidean distance from the window atm. Should
         #take weight(distance) into account, not just windowPos.

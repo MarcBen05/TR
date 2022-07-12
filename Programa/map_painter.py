@@ -1,6 +1,3 @@
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 from PIL import Image, ImageDraw
 
 class MapPainter:
@@ -12,7 +9,7 @@ class MapPainter:
         self.lat = [41.4051,41.3905]
         self.lon = [2.1728,2.1962]
 
-    def coord_to_img(self, x, y):
+    def coord_to_img(self, x: float, y:float ) -> tuple[float,float]:
         #https://gamedev.stackexchange.com/questions/33441/how-to-convert-a-number-from-one-min-max-set-to-another-min-max-set/33445
         x_conv = abs(((x-self.lat[0])/(self.lat[1]-self.lat[0]))*(self.image.size[0]))
         y_conv = ((y-self.lon[0])/(self.lon[1]-self.lon[0]))*(self.image.size[1])
@@ -21,7 +18,7 @@ class MapPainter:
 
         return x_conv, y_conv
 
-    def img_to_coord(self, x, y):
+    def img_to_coord(self, x: float, y: float) -> tuple[float,float]:
         #https://gamedev.stackexchange.com/questions/33441/how-to-convert-a-number-from-one-min-max-set-to-another-min-max-set/33445
         #Result := ((Input - InputLow) / (InputHigh - InputLow)) * (OutputHigh - OutputLow) + OutputLow;
         
@@ -32,10 +29,23 @@ class MapPainter:
 
         return x_conv, y_conv
 
-    def insert_into_route(self, x, y):
+    def insert_into_route(self, x: float, y: float):
         self.points.append(self.coord_to_img(x, y))
 
     def paint_map(self):
         draw = ImageDraw.Draw(self.image)
         draw.line(self.points, fill=(255, 0, 0), width=2)
         self.image.save('result_Map.png')
+
+"""
+p = MapPainter()
+
+for i in range(0, 14):
+    if i == 11:
+        continue
+
+    x, y = p.img_to_coord(130+i*69, 7)
+    p.insert_into_route(x, y)
+
+p.paint_map()
+"""

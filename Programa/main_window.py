@@ -42,3 +42,6 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.gayButton.setText(_translate("MainWindow", "GAY"))
+
+    def mousePressEvent(self, QMouseEvent):
+        print(QMouseEvent.pos())
