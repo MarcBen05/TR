@@ -1,6 +1,6 @@
 from plistlib import UID
 from PyQt5 import QtCore, QtGui, QtWidgets                                                                                                               
-from test import *
+from main_window import *
 import sys
 
 app = QtWidgets.QApplication(sys.argv)
