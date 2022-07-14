@@ -1,9 +1,9 @@
 from PIL import Image, ImageDraw
 
 class MapPainter:
-    def __init__(self):
+    def __init__(self, map_path='map.png'):
         self.points = []
-        self.image = Image.open('map.png', 'r')
+        self.image = Image.open(map_path, 'r')
 
         #Al index 0, aquestes son les coordenades del punt superior esquerra de l'imatge
         self.lat = [41.4051,41.3905]
@@ -29,13 +29,22 @@ class MapPainter:
 
         return x_conv, y_conv
 
-    def insert_into_route(self, x: float, y: float):
+    def insert_into_route_coord(self, x: float, y: float):
         self.points.append(self.coord_to_img(x, y))
 
-    def paint_map(self):
+    def insert_into_route(self, x: float, y: float):
+        self.points.append((x,y))
+
+    def paint_map(self, save_path='result_Map.png', color=(255,0,0)):
         draw = ImageDraw.Draw(self.image)
-        draw.line(self.points, fill=(255, 0, 0), width=2)
-        self.image.save('result_Map.png')
+        draw.line(self.points, fill=color, width=2)
+        self.image.save(save_path)
+    
+    def paint_points(self, pos: tuple[float,float], r: int):
+        x,y = pos
+        draw = ImageDraw.Draw(self.image)
+        draw.ellipse((x-r,y-r,x+r,y+r),fill="yellow")
+        self.image.save('test_map.png')
 
 """
 p = MapPainter()
