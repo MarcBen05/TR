@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 INFINITY = 2.0**50.0
 
@@ -14,7 +15,7 @@ class Graph:
         self.edges = {int:list[int]}
         self.weight = {int:{int:float}}
 
-        self.vertex_coord = {int:(float,float)}
+        self.vertex_coord = {}
 
         #Based on the data(pos) in the csv file, we can know how many vertices there are, their positions and initislize
         #both the adjacency list and the weight matrix.
@@ -38,15 +39,22 @@ class Graph:
     def set_vertex_coord(self, index, pos: tuple[float,float]):
         self.vertex_coord.update({index:pos})
 
-#FIXME: Aquesta funció heurística és per al mode de busca ràpida normal
-#       per això retorna només la distància euclidiana entre les posicions
-#       EL QUE S'HA DE FER ARA ÉS CREAR-NE UNA QUE TINGUI EN COMPTE LES VALORACIONS
-#       AL INSTAGRAM COM A PART DE LA FUNCIÓ.
-#
+    def find_closest(self,coord) -> int:
+        x1,y1 = coord
+        return min(self.vertex_coord, key=lambda x:abs(((x1-self.vertex_coord[x][0])**2+(y1-self.vertex_coord[x][1])**2)**0.5))
+
 #FIXME: ALGORITME RUTA (UTILITZARÀ A*): SELECCIONES EL TIPUS DE LLOC QUE VOLS VISITAR
 #       TROBA ELS VÈRTEXS QUE COMPLEIXIN AQUESTA CONDICIÓ I BUSCA EL CAMÍ MÉS CURT
 #       ENTRE ELLS I ELS UNEIX (DONARÀ COM A RESULTAT EL CAMÍ MÉS CURT D'UN EXTREM A UN ALTRE PASSANT PER TOTS ELS MARCATS)
 #       POSTERIORMENT, BUSCA EL CAMÍ MÉS CURT ENTRE LA TEVA POSICIÓ I UN VÈRTEX EXTREM I L'ADHEREIX A LA RUTA
+
+#FIXME: Carregar dos grafs inicialment: cotxe(dirigit) i peu(simple). Depenent de que escolleixi l'usuari,
+#       emprarem un o l'altre
+
+#FIXME: Aquesta funció heurística és per al mode de busca ràpida normal
+#       per això retorna només la distància euclidiana entre les posicions
+#       EL QUE S'HA DE FER ARA ÉS CREAR-NE UNA QUE TINGUI EN COMPTE LES VALORACIONS
+#       AL INSTAGRAM COM A PART DE LA FUNCIÓ.
 def h_test(v: tuple[float, float], goal: tuple[float, float]) -> float:
     x1, y1 = v
     x2, y2 = goal

@@ -30,7 +30,7 @@ class Ui_MainWindow(object):
         #Aquest codi d'aqui crea els elements necessaris per a crear
         #un graf. Pots indicar el tipus de graf (simple o dirigit) i
         #assignar un pes a l'aresta
-        #"""
+        """
         self.cb = QtWidgets.QComboBox(self.centralwidget)
         self.cb.setGeometry(QtCore.QRect(1040, 24, 75, 23))
         self.cb.addItems(["Simple", "Dirigit"])
@@ -39,6 +39,17 @@ class Ui_MainWindow(object):
         self.textEdit.setGeometry(QtCore.QRect(1040, 0, 75, 23))
         self.textEdit.setObjectName("textEdit")
         #"""
+
+        self.originLabel = QtWidgets.QLabel(self.centralwidget)
+        self.originLabel.setGeometry(QtCore.QRect(1040, 0, 75, 23))
+        self.originLabel.setText("Origen")
+        self.originLabel.setObjectName("originLabel")
+
+        self.originLat = QtWidgets.QLineEdit(self.centralwidget)
+        self.originLat.setGeometry(QtCore.QRect(1040, 24, 75, 23))
+
+        self.originLon = QtWidgets.QLineEdit(self.centralwidget)
+        self.originLon.setGeometry(QtCore.QRect(1116, 24, 75, 23))
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -59,12 +70,13 @@ class Ui_MainWindow(object):
         #FIXME: TEMPORARY
         MainWindow.setWindowFlags(QtCore.Qt.FramelessWindowHint)        
 
-        self.firstBtn = 0
+        #self.firstBtn = 0
         self.firstClick = True
 
         self.g = Graph()
         self.g_val = list(self.g.vertex_coord.values())
-    
+
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -83,5 +95,13 @@ class Ui_MainWindow(object):
         p.paint_points(pos=(QMouseEvent.x(),QMouseEvent.y()),r=10)
         self.label.setPixmap(QtGui.QPixmap("test_map.png"))
         """
+        cv = self.g.find_closest((np.int64(QMouseEvent.x()), np.int64(QMouseEvent.y())))
+        oLat, oLon = self.map_painter.img_to_coord(self.g.vertex_coord[cv][0],self.g.vertex_coord[cv][1])
+
+        self.originLat.setText(f"{round(oLat,2)}")
+        self.originLon.setText(f"{round(oLon,2)}")
+        self.firstClick = False
         #"""
         pass
+
+
