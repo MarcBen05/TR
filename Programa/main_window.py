@@ -22,34 +22,10 @@ class Ui_MainWindow(object):
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(0, -10, 1011, 751))
         self.label.setText("")
-        self.label.setPixmap(QtGui.QPixmap("test_map.png"))
+        self.label.setPixmap(QtGui.QPixmap("assets/map.png"))
         self.label.setScaledContents(True)
         self.label.setObjectName("label")
         self.label.mouseReleaseEvent = self.mouseReleased
-
-        #Aquest codi d'aqui crea els elements necessaris per a crear
-        #un graf. Pots indicar el tipus de graf (simple o dirigit) i
-        #assignar un pes a l'aresta
-        """
-        self.cb = QtWidgets.QComboBox(self.centralwidget)
-        self.cb.setGeometry(QtCore.QRect(1040, 24, 75, 23))
-        self.cb.addItems(["Simple", "Dirigit"])
-
-        self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit.setGeometry(QtCore.QRect(1040, 0, 75, 23))
-        self.textEdit.setObjectName("textEdit")
-        #"""
-
-        self.originLabel = QtWidgets.QLabel(self.centralwidget)
-        self.originLabel.setGeometry(QtCore.QRect(1040, 0, 75, 23))
-        self.originLabel.setText("Origen")
-        self.originLabel.setObjectName("originLabel")
-
-        self.originLat = QtWidgets.QLineEdit(self.centralwidget)
-        self.originLat.setGeometry(QtCore.QRect(1040, 24, 75, 23))
-
-        self.originLon = QtWidgets.QLineEdit(self.centralwidget)
-        self.originLon.setGeometry(QtCore.QRect(1116, 24, 75, 23))
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -65,17 +41,77 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-        self.map_painter = MapPainter("test_map.png")
+        self.map_painter = MapPainter('assets/map.png')
 
         #FIXME: TEMPORARY
-        MainWindow.setWindowFlags(QtCore.Qt.FramelessWindowHint)        
+        MainWindow.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+
+        #Aquest codi d'aqui crea els elements necessaris per a crear
+        #un graf. Pots indicar el tipus de graf (simple o dirigit) i
+        #assignar un pes a l'aresta
+        """
+        self.cb = QtWidgets.QComboBox(self.centralwidget)
+        self.cb.setGeometry(QtCore.QRect(1040, 24, 75, 23))
+        self.cb.addItems(["Simple", "Dirigit"])
+
+        self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
+        self.textEdit.setGeometry(QtCore.QRect(1040, 0, 75, 23))
+        self.textEdit.setObjectName("textEdit")
+        """
+
+        self.originLabel = QtWidgets.QLabel(self.centralwidget)
+        self.originLabel.setGeometry(QtCore.QRect(1040, 0, 75, 23))
+        self.originLabel.setText("Origen")
+        self.originLabel.setObjectName("originLabel")
+
+        self.originLat = QtWidgets.QLineEdit(self.centralwidget)
+        self.originLat.setGeometry(QtCore.QRect(1040, 24, 75, 23))
+        self.originLat.setPlaceholderText("Latitud")
+
+        self.originLon = QtWidgets.QLineEdit(self.centralwidget)
+        self.originLon.setGeometry(QtCore.QRect(1116, 24, 75, 23))
+        self.originLon.setPlaceholderText("Longitud")
+
+        self.goalLabel = QtWidgets.QLabel(self.centralwidget)
+        self.goalLabel.setGeometry(QtCore.QRect(1040, 48, 75, 23))
+        self.goalLabel.setText("Destí")
+        self.goalLabel.setObjectName("goalLabel")
+
+        self.goalLat = QtWidgets.QLineEdit(self.centralwidget)
+        self.goalLat.setGeometry(QtCore.QRect(1040, 72, 75, 23))
+        self.goalLat.setPlaceholderText("Latitud")
+
+        self.goalLon = QtWidgets.QLineEdit(self.centralwidget)
+        self.goalLon.setGeometry(QtCore.QRect(1116, 72, 75, 23))
+        self.goalLon.setPlaceholderText("Longitud")
+
+        self.calculateButton = QtWidgets.QPushButton(self.centralwidget)
+        self.calculateButton.setGeometry(QtCore.QRect(1040, 96, 75, 23))
+        self.calculateButton.setObjectName("CalculateButton")
+        self.calculateButton.setText("Calcular")
+        #self.calculateButton.clicked.connect(self.calculate_route)
+
+        self.pinLabel = QtWidgets.QLabel(self.centralwidget)
+        self.pinLabel.setScaledContents(True)
+        self.pinLabel.setGeometry(QtCore.QRect(0,0,16,26))
+        self.pinLabel.setText("")
+        self.pinLabel.setObjectName("pinLabel")
+        self.pinLabel.setPixmap(QtGui.QPixmap("assets/marcador.png"))
+        self.pinLabel.hide()
+
+        self.resetButton = QtWidgets.QPushButton(self.centralwidget)
+        self.resetButton.setGeometry(QtCore.QRect(1116, 96, 23, 23))
+        self.resetButton.setObjectName("ResetButton")
+        self.resetButton.setText("R")
+        self.resetButton.clicked.connect(self.reset_route)
+
+        #"""     
 
         #self.firstBtn = 0
         self.firstClick = True
 
         self.g = Graph()
         self.g_val = list(self.g.vertex_coord.values())
-
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -96,12 +132,26 @@ class Ui_MainWindow(object):
         self.label.setPixmap(QtGui.QPixmap("test_map.png"))
         """
         cv = self.g.find_closest((np.int64(QMouseEvent.x()), np.int64(QMouseEvent.y())))
-        oLat, oLon = self.map_painter.img_to_coord(self.g.vertex_coord[cv][0],self.g.vertex_coord[cv][1])
+        x = self.g.vertex_coord[cv][0]
+        y = self.g.vertex_coord[cv][1]
 
-        self.originLat.setText(f"{round(oLat,2)}")
-        self.originLon.setText(f"{round(oLon,2)}")
-        self.firstClick = False
+        oLat, oLon = self.map_painter.img_to_coord(x,y)
+
+        w = self.pinLabel.geometry().width()
+        h = self.pinLabel.geometry().height()
+
+        self.pinLabel.move(x-(w/2.0),y-h)
+        self.pinLabel.show()
+
+        self.goalLat.setText(f"{round(oLat,4)}")
+        self.goalLon.setText(f"{round(oLon,4)}")
         #"""
-        pass
 
-
+    def reset_route(self):
+        self.label.setPixmap(QtGui.QPixmap('assets/map.png'))
+        self.pinLabel.hide()
+        
+        self.originLat.setText("")
+        self.originLon.setText("")
+        self.goalLat.setText("")
+        self.goalLon.setText("")

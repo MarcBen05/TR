@@ -22,10 +22,6 @@ f.write("\n")
 """
 i = 1
 for d in graph_data:
-    if i < 290:
-        i+=1
-        continue
-
     x,y = d
 
     f.write(f"def button{i}_clicked(self):\n")

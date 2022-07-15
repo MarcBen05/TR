@@ -14,8 +14,6 @@ class MapPainter:
         x_conv = abs(((x-self.lat[0])/(self.lat[1]-self.lat[0]))*(self.image.size[0]))
         y_conv = ((y-self.lon[0])/(self.lon[1]-self.lon[0]))*(self.image.size[1])
 
-        print(f"Latitud: {x}; Longitud: {y} -> x: {x_conv}, y: {y_conv}")
-
         return x_conv, y_conv
 
     def img_to_coord(self, x: float, y: float) -> tuple[float,float]:
@@ -24,8 +22,6 @@ class MapPainter:
         
         x_conv = abs(((x-0)/(1006-0))*(self.lat[1]-self.lat[0])+self.lat[0])
         y_conv = ((y-0)/(749-0))*(self.lon[1]-self.lon[0])+self.lon[0]
-
-        print(f"x: {x}; y: {y} -> Latitud: {x_conv}, Longitud: {y_conv}")
 
         return x_conv, y_conv
 
