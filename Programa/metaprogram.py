@@ -12,7 +12,7 @@ for d in graph_data:
 
     f.write(f"self.button{i} = QtWidgets.QPushButton(self.centralwidget)\n")
     f.write(f"self.button{i}.clicked.connect(self.button{i}_clicked)\n")
-    f.write(f"self.button{i}.setObjectName('{x},{y}')\n")
+    f.write(f"self.button{i}.setObjectName('{i}')\n")
     f.write(f"self.button{i}.move({x},{y})\n")
     f.write(f"\n")
 
@@ -26,6 +26,7 @@ for d in graph_data:
 
     f.write(f"def button{i}_clicked(self):\n")
 
+    f.write(f"\tprint(self.button{i}.objectName())\n")
     f.write("\tif self.firstClick:\n")
     f.write(f"\t\tself.firstBtn = self.g_val.index(({x},{y}))\n")
     f.write("\t\tself.firstClick = False\n")

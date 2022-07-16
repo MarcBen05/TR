@@ -286,5 +286,10 @@
 500,658 #Arc del triomf
 294,127 #Sagrada familia
 644,109 #Parc de glories
-629,513 #Parc estacio nord
-523,671
+629,513 #Parc estacio nord. 1->Monument, 2->Museu, 3-> Lloc emblematic, 4->Parc
+523,671                     #5->Oci nocturn, 6->Lloc popular insta, 7->Exposicions, 8->Atraccions turistiques
+496,270
+535,270
+534,307
+497,307
+515,289 #La monumental

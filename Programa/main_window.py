@@ -89,8 +89,9 @@ class Ui_MainWindow(object):
         self.calculateButton.setGeometry(QtCore.QRect(1040, 96, 75, 23))
         self.calculateButton.setObjectName("CalculateButton")
         self.calculateButton.setText("Calcular")
-        #self.calculateButton.clicked.connect(self.calculate_route)
+        self.calculateButton.clicked.connect(self.calculate_route)
 
+        #Indicador per al desti
         self.pinLabel = QtWidgets.QLabel(self.centralwidget)
         self.pinLabel.setScaledContents(True)
         self.pinLabel.setGeometry(QtCore.QRect(0,0,16,26))
@@ -98,6 +99,8 @@ class Ui_MainWindow(object):
         self.pinLabel.setObjectName("pinLabel")
         self.pinLabel.setPixmap(QtGui.QPixmap("assets/marcador.png"))
         self.pinLabel.hide()
+
+        #Indicador per a l'origen
 
         self.resetButton = QtWidgets.QPushButton(self.centralwidget)
         self.resetButton.setGeometry(QtCore.QRect(1116, 96, 23, 23))
@@ -110,8 +113,12 @@ class Ui_MainWindow(object):
         #self.firstBtn = 0
         self.firstClick = True
 
+        self.originVertex = 0
+        self.goalVertex = 0
+
         self.g = Graph()
         self.g_val = list(self.g.vertex_coord.values())
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -140,11 +147,19 @@ class Ui_MainWindow(object):
         w = self.pinLabel.geometry().width()
         h = self.pinLabel.geometry().height()
 
-        self.pinLabel.move(x-(w/2.0),y-h)
-        self.pinLabel.show()
+        if self.firstClick:
+            self.originLat.setText(f"{round(oLat,4)}")
+            self.originLon.setText(f"{round(oLon,4)}")
+            self.firstClick = False
+            self.originVertex = cv
+        else:
+            self.pinLabel.move(x-(w/2.0),y-h)
+            self.pinLabel.show()
 
-        self.goalLat.setText(f"{round(oLat,4)}")
-        self.goalLon.setText(f"{round(oLon,4)}")
+            self.goalLat.setText(f"{round(oLat,4)}")
+            self.goalLon.setText(f"{round(oLon,4)}")
+            self.firstClick = True
+            self.goalVertex = cv
         #"""
 
     def reset_route(self):
@@ -155,3 +170,26 @@ class Ui_MainWindow(object):
         self.originLon.setText("")
         self.goalLat.setText("")
         self.goalLon.setText("")
+
+        self.firstClick = True
+        self.originVertex = 0
+        self.goalVertex = 0
+
+        self.map_painter.set_map('assets/map.png')
+
+    def calculate_route(self):
+        if self.originVertex == 0 or self.goalVertex == 0:
+            return
+
+        originVertex = self.originVertex
+        goalVertex = self.goalVertex
+
+        route = A_Star(self.g, originVertex, goalVertex)
+
+        if route:
+            self.map_painter.set_route(self.g.route_to_coords(route))
+            self.map_painter.paint_map('assets/result_map.png')
+            self.label.setPixmap(QtGui.QPixmap('assets/result_map.png'))
+
+        else:
+            print("There's no route")

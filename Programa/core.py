@@ -42,6 +42,13 @@ class Graph:
     def find_closest(self,coord) -> int:
         x1,y1 = coord
         return min(self.vertex_coord, key=lambda x:abs(((x1-self.vertex_coord[x][0])**2+(y1-self.vertex_coord[x][1])**2)**0.5))
+    
+    def route_to_coords(self, route):
+        coord = []
+        for i in route:
+            coord.append(self.vertex_coord[i])
+        return coord
+
 
 #FIXME: ALGORITME RUTA (UTILITZARÀ A*): SELECCIONES EL TIPUS DE LLOC QUE VOLS VISITAR
 #       TROBA ELS VÈRTEXS QUE COMPLEIXIN AQUESTA CONDICIÓ I BUSCA EL CAMÍ MÉS CURT
