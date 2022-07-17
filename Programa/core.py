@@ -5,8 +5,9 @@ INFINITY = 2.0**50.0
 
 class Graph:
     def __init__(self, v_data_path="vertexs.csv", e_data_path="arestes.csv"):
-        data = pd.read_csv(v_data_path, names=['LATITUD', 'LONGITUD'], sep=",", comment="#")
-        vertex_data = tuple(zip(data['LATITUD'].values, data['LONGITUD'].values))
+        data = pd.read_csv(v_data_path, names=['LATITUD', 'LONGITUD', 'CATEGORIA'], sep=",", comment="#")
+        data['CATEGORIA'] = data['CATEGORIA'].astype('|S')
+        vertex_data = tuple(zip(data['LATITUD'].values, data['LONGITUD'].values, data['CATEGORIA'].values))
 
         data_edge = pd.read_csv(e_data_path, names=['ORIGEN', 'DESTI', 'PES'], sep=",", comment="#")
         edge_data = tuple(zip(data_edge['ORIGEN'].values, data_edge['DESTI'].values, data_edge['PES'].values))
@@ -16,21 +17,32 @@ class Graph:
         self.weight = {int:{int:float}}
 
         self.vertex_coord = {}
+        # 1->Monument, 2->Museu, 3-> Lloc emblematic, 4->Parc 5->Oci nocturn, 6->Lloc popular insta, 7->Exposicions, 8->Atraccions turistiques
+        self.vertex_caract = {}
 
         #Based on the data(pos) in the csv file, we can know how many vertices there are, their positions and initislize
         #both the adjacency list and the weight matrix.
         index = 1
         for d in vertex_data:
+            x,y,z = d
             self.edges.update({index:[]})
-            self.vertex_coord[index] = d
+            self.vertex_caract.update({index:[]})
+            self.vertex_coord[index] = (x,y)
+            #Assignar les categories a cada vertex
+            if z.decode('UTF-8') != 'nan':
+                for c in z.decode('UTF-8')[:-2]:
+                    self.vertex_caract[index].append(c)
+            #Assignar totes les distancies a infinit
             for j in range(1, self.vertices+1):
                 self.weight.update({index:{j:INFINITY}})
             index += 1
+        
+        #Assignar les arestes amb els seus pesos
         index = 1
         for d in edge_data:
             o,g,w = d
             self.set_edge(o,g,w)
-            index +=1          
+            index +=1       
     
     def set_edge(self, v0: int, vf: int, w: float):
         self.edges[v0].append(vf)
@@ -49,6 +61,26 @@ class Graph:
             coord.append(self.vertex_coord[i])
         return coord
 
+    def find_vertices_with_tag(self, tag: str):
+        vertices = []
+        for k in self.vertex_caract.keys():
+            if self.vertex_caract[k]:
+                for i in self.vertex_caract[k]:
+                    if i == tag:
+                        vertices.append(k)
+
+        return vertices
+
+    def find_vertices_with_tags(self, tags: list[str]):
+        vertices = []
+        subset = set(tags)
+        for k in self.vertex_caract.keys():
+            if self.vertex_caract[k]:
+                if subset.issubset(set(self.vertex_caract[k])):
+                    vertices.append(k)
+
+        return vertices
+
 
 #FIXME: ALGORITME RUTA (UTILITZARÀ A*): SELECCIONES EL TIPUS DE LLOC QUE VOLS VISITAR
 #       TROBA ELS VÈRTEXS QUE COMPLEIXIN AQUESTA CONDICIÓ I BUSCA EL CAMÍ MÉS CURT
@@ -58,10 +90,7 @@ class Graph:
 #FIXME: Carregar dos grafs inicialment: cotxe(dirigit) i peu(simple). Depenent de que escolleixi l'usuari,
 #       emprarem un o l'altre
 
-#FIXME: Aquesta funció heurística és per al mode de busca ràpida normal
-#       per això retorna només la distància euclidiana entre les posicions
-#       EL QUE S'HA DE FER ARA ÉS CREAR-NE UNA QUE TINGUI EN COMPTE LES VALORACIONS
-#       AL INSTAGRAM COM A PART DE LA FUNCIÓ.
+#FIXME: Aquesta funció hauria de tenir el pes de cada aresta en compte
 def h_test(v: tuple[float, float], goal: tuple[float, float]) -> float:
     x1, y1 = v
     x2, y2 = goal
@@ -128,3 +157,8 @@ for i in range(1,g.vertices+1):
 
 print(A_Star(g,2,6,h))
 """
+g = Graph()
+dist_coord = (abs(g.vertex_coord[110][0] - g.vertex_coord[144][0]), abs(g.vertex_coord[110][1] - g.vertex_coord[144][1]))
+x, y = dist_coord
+pixel_per_unit = (x**2+y**2)**0.5
+print(f"Pixel per unit: {pixel_per_unit}")

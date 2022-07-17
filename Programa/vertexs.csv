@@ -1,3 +1,4 @@
+#(x,y,característica)
 96,43
 27,47
 168,45
@@ -279,17 +280,17 @@
 618,642
 658,608
 859,105
-41,723
+41,723 
 535,205
-342,501 #Plaça de Tetuan
+342,501,34 #Plaça de Tetuan
 11,378
-500,658 #Arc del triomf
-294,127 #Sagrada familia
-644,109 #Parc de glories
-629,513 #Parc estacio nord. 1->Monument, 2->Museu, 3-> Lloc emblematic, 4->Parc
-523,671                     #5->Oci nocturn, 6->Lloc popular insta, 7->Exposicions, 8->Atraccions turistiques
+500,658,13 #Arc del triomf
+294,127,134 #Sagrada familia
+644,109,34#Parc de glories
+629,513,34#Parc estacio nord.
+523,671
 496,270
 535,270
 534,307
 497,307
-515,289 #La monumental
+515,289,13#La monumental

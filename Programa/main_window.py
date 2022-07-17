@@ -59,6 +59,7 @@ class Ui_MainWindow(object):
         self.textEdit.setObjectName("textEdit")
         """
 
+        #Widgets per a senyalar l'origen
         self.originLabel = QtWidgets.QLabel(self.centralwidget)
         self.originLabel.setGeometry(QtCore.QRect(1040, 0, 75, 23))
         self.originLabel.setText("Origen")
@@ -72,6 +73,14 @@ class Ui_MainWindow(object):
         self.originLon.setGeometry(QtCore.QRect(1116, 24, 75, 23))
         self.originLon.setPlaceholderText("Longitud")
 
+        self.setOriginButton = QtWidgets.QPushButton(self.centralwidget)
+        self.setOriginButton.setGeometry(QtCore.QRect(1116+75, 24, 23, 23))
+        self.setOriginButton.setText("")
+        self.setOriginButton.setIcon(QtGui.QIcon("assets/marcar_localitzacio.png"))
+        self.setOriginButton.setIconSize(QtCore.QSize(18,18))
+        self.setOriginButton.clicked.connect(self.select_origin)
+
+        #Widgets per a senyalar el desti
         self.goalLabel = QtWidgets.QLabel(self.centralwidget)
         self.goalLabel.setGeometry(QtCore.QRect(1040, 48, 75, 23))
         self.goalLabel.setText("Destí")
@@ -85,11 +94,19 @@ class Ui_MainWindow(object):
         self.goalLon.setGeometry(QtCore.QRect(1116, 72, 75, 23))
         self.goalLon.setPlaceholderText("Longitud")
 
+        self.setGoalButton = QtWidgets.QPushButton(self.centralwidget)
+        self.setGoalButton.setGeometry(QtCore.QRect(1116+75, 72, 23, 23))
+        self.setGoalButton.setText("")
+        self.setGoalButton.setIcon(QtGui.QIcon("assets/marcar_localitzacio.png"))
+        self.setGoalButton.setIconSize(QtCore.QSize(18,18))
+        self.setGoalButton.clicked.connect(self.select_goal)
+
+        #Boto per a calcular cami/ruta
         self.calculateButton = QtWidgets.QPushButton(self.centralwidget)
         self.calculateButton.setGeometry(QtCore.QRect(1040, 96, 75, 23))
         self.calculateButton.setObjectName("CalculateButton")
         self.calculateButton.setText("Calcular")
-        self.calculateButton.clicked.connect(self.calculate_route)
+        self.calculateButton.clicked.connect(self.calculate_path)
 
         #Indicador per al desti
         self.pinLabel = QtWidgets.QLabel(self.centralwidget)
@@ -101,6 +118,13 @@ class Ui_MainWindow(object):
         self.pinLabel.hide()
 
         #Indicador per a l'origen
+        self.circleLabel = QtWidgets.QLabel(self.centralwidget)
+        self.circleLabel.setScaledContents(True)
+        self.circleLabel.setGeometry(QtCore.QRect(0,0,16,16))
+        self.circleLabel.setText("")
+        self.circleLabel.setObjectName("circlenLabel")
+        self.circleLabel.setPixmap(QtGui.QPixmap("assets/indicador.png"))
+        self.circleLabel.hide()
 
         self.resetButton = QtWidgets.QPushButton(self.centralwidget)
         self.resetButton.setGeometry(QtCore.QRect(1116, 96, 23, 23))
@@ -108,9 +132,33 @@ class Ui_MainWindow(object):
         self.resetButton.setText("R")
         self.resetButton.clicked.connect(self.reset_route)
 
+        #Selecció de mode, ruta o camí
+        self.cb_label = QtWidgets.QLabel(self.centralwidget)
+        self.cb_label.setGeometry(QtCore.QRect(1040, 120, 75, 23))
+        self.cb_label.setText("Mode:")
+        self.cb_label.setObjectName("cbLabel")
+
+        self.cb = QtWidgets.QComboBox(self.centralwidget)
+        self.cb.setGeometry(QtCore.QRect(1116-40, 120, 62, 23))
+        self.cb.addItems(["Camí", "Ruta"])
+        self.cb.currentIndexChanged.connect(self.change_mode)
+
+        #Widgets de ruta
+        self.routeLabel = QtWidgets.QLabel(self.centralwidget)
+        self.routeLabel.setGeometry(QtCore.QRect(1040, 48, 75, 23))
+        self.routeLabel.setText("Ruta")
+        self.routeLabel.setObjectName("routeLabel")
+        self.routeLabel.hide()
+
+        self.routeComboBox = QtWidgets.QComboBox(self.centralwidget)
+        self.routeComboBox.setGeometry(QtCore.QRect(1040, 72, 75*2, 23))
+        self.routeComboBox.addItems(['Monuments', 'Museus', 'Lloc emblemàtics', 'Parcs', 'Oci nocturn', "Llocs popular d'Instagram", 'Exposicions', 'Atraccions turistiques'])
+        self.routeComboBox.hide()
+
         #"""     
 
-        #self.firstBtn = 0
+        # 0 = Cami; 1 = Ruta
+        self.mode = 0
         self.firstClick = True
 
         self.originVertex = 0
@@ -144,15 +192,25 @@ class Ui_MainWindow(object):
 
         oLat, oLon = self.map_painter.img_to_coord(x,y)
 
-        w = self.pinLabel.geometry().width()
-        h = self.pinLabel.geometry().height()
+        print(cv)
 
         if self.firstClick:
+            w = self.circleLabel.geometry().width()
+            h = self.circleLabel.geometry().height()
+
+            self.circleLabel.move(x-0.5*w,y-0.5*h)
+            self.circleLabel.show()
+
             self.originLat.setText(f"{round(oLat,4)}")
             self.originLon.setText(f"{round(oLon,4)}")
             self.firstClick = False
             self.originVertex = cv
         else:
+            if self.mode == 1:
+                return
+            w = self.pinLabel.geometry().width()
+            h = self.pinLabel.geometry().height()
+
             self.pinLabel.move(x-(w/2.0),y-h)
             self.pinLabel.show()
 
@@ -162,9 +220,16 @@ class Ui_MainWindow(object):
             self.goalVertex = cv
         #"""
 
+    def select_origin(self):
+        self.firstClick = True
+
+    def select_goal(self):
+        self.firstClick = False
+
     def reset_route(self):
         self.label.setPixmap(QtGui.QPixmap('assets/map.png'))
         self.pinLabel.hide()
+        self.circleLabel.hide()
         
         self.originLat.setText("")
         self.originLon.setText("")
@@ -177,7 +242,7 @@ class Ui_MainWindow(object):
 
         self.map_painter.set_map('assets/map.png')
 
-    def calculate_route(self):
+    def calculate_path(self):
         if self.originVertex == 0 or self.goalVertex == 0:
             return
 
@@ -187,9 +252,41 @@ class Ui_MainWindow(object):
         route = A_Star(self.g, originVertex, goalVertex)
 
         if route:
+            self.map_painter.set_map('assets/map.png')
             self.map_painter.set_route(self.g.route_to_coords(route))
             self.map_painter.paint_map('assets/result_map.png')
             self.label.setPixmap(QtGui.QPixmap('assets/result_map.png'))
 
         else:
             print("There's no route")
+
+    def calculate_route(self):
+        pass
+
+    def change_mode(self):
+        if self.cb.currentText() == 'Camí':
+            self.mode = 0
+            self.calculateButton.clicked.disconnect()
+            self.calculateButton.clicked.connect(self.calculate_path)
+
+            self.routeLabel.hide()
+            self.routeComboBox.hide()
+
+            self.goalLabel.show()
+            self.goalLat.show()
+            self.goalLon.show()
+            self.setGoalButton.show()
+        else:
+            self.mode = 1
+            self.calculateButton.clicked.disconnect()
+            self.calculateButton.clicked.connect(self.calculate_route)
+
+            self.goalLabel.hide()
+            self.goalLat.hide()
+            self.goalLon.hide()
+            self.setGoalButton.hide()
+            self.pinLabel.hide()
+
+            self.routeLabel.show()
+            self.routeComboBox.show()
+
