@@ -160,6 +160,7 @@ class Ui_MainWindow(object):
         # 0 = Cami; 1 = Ruta
         self.mode = 0
         self.firstClick = True
+        self.sim = True
 
         self.originVertex = 0
         self.goalVertex = 0
@@ -170,13 +171,16 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))       
+
 
     #Aquesta funció et permet marcar les interseccions (vertex del graf) al mapa
     #i ho escriu a un archiu .csv per a que després el programa 'metaprogram.py'
     #et doni el codi per els botons i les seves funcions. Aquests t'ajudaran a indicar
     #arestes i els seus pesos
     def mouseReleased(self, QMouseEvent):
+        if QMouseEvent.button() != QtCore.Qt.MouseButton.LeftButton:
+            return
         """
         f = open("vertexs.csv", "a")
         f.write(f"{QMouseEvent.x()},{QMouseEvent.y()}\n")
@@ -190,9 +194,12 @@ class Ui_MainWindow(object):
         x = self.g.vertex_coord[cv][0]
         y = self.g.vertex_coord[cv][1]
 
+        print(cv)
+
         oLat, oLon = self.map_painter.img_to_coord(x,y)
 
-        print(cv)
+        if self.mode == 1:
+            self.firstClick = True
 
         if self.firstClick:
             w = self.circleLabel.geometry().width()
@@ -206,8 +213,6 @@ class Ui_MainWindow(object):
             self.firstClick = False
             self.originVertex = cv
         else:
-            if self.mode == 1:
-                return
             w = self.pinLabel.geometry().width()
             h = self.pinLabel.geometry().height()
 
@@ -218,6 +223,8 @@ class Ui_MainWindow(object):
             self.goalLon.setText(f"{round(oLon,4)}")
             self.firstClick = True
             self.goalVertex = cv
+
+        self.label.setFocus()
         #"""
 
     def select_origin(self):
@@ -249,19 +256,85 @@ class Ui_MainWindow(object):
         originVertex = self.originVertex
         goalVertex = self.goalVertex
 
-        route = A_Star(self.g, originVertex, goalVertex)
+        #Els pesos no són utilitzats en aquest lloc, però serà útil per al pròxim
+        path, w = Dijkstra(self.g, originVertex, goalVertex)
 
+        if path:
+            self.map_painter.set_map('assets/map.png')
+            self.map_painter.set_route(self.g.route_to_coords(path))
+            self.map_painter.paint_map('assets/result_map.png')
+            self.label.setPixmap(QtGui.QPixmap('assets/result_map.png'))
+
+        else:
+            print("There's no route!")
+
+#FIXME: Finish me!
+    def calculate_route(self):
+        if self.originVertex == 0 or not self.originLat.text() or not self.originLon.text():
+            return
+        
+        originVertex = self.originVertex
+        routeCaract = str(self.routeComboBox.currentIndex() + 1) #L'índex comença per 0, però necessitem que comenci per 1
+
+        #Dict key is vertex
+        dist = {}
+        routes = {}
+
+        print(f"Finding route with caract: {routeCaract}")
+
+        taggedVertices = self.g.find_vertices_with_tag(routeCaract)
+
+        if not taggedVertices:
+            print("ERROR: taggedVertices list is empty!")
+            print(f"INFO: caract: {routeCaract}, origin: {originVertex}")
+            return
+
+        routeList = []
+        routeList.append(originVertex)
+
+        #Busca els camins des del vertex origen fins a tots els que compleixen la caracteristica
+        #després, agafa el que té el camí més curt i el posa com a origen a la següent iteració.
+        #Quan tots els vèrtex estan ordenats, trenca el bucle
+        while True:
+            for v in taggedVertices:
+                route, w = Dijkstra(self.g, routeList[-1], v)
+                dist[v] = w
+                routes[v] = route
+
+            vertex = 0
+            distance = INFINITY
+            if not taggedVertices:
+                break
+
+            for v in taggedVertices:
+                if dist[v] < distance:
+                    distance = dist[v]
+                    vertex = v
+            routeList.append(vertex)
+            taggedVertices.remove(vertex)
+
+        route = []
+        #Evita que el camí passi per vèrtexs anteriors per a evitar confusions
+        restriction = {}
+        for i in range(0, len(routeList)):
+            if i == 0:
+                continue
+            r, w, restr = Dijkstra_Restricted(self.g, routeList[i-1], routeList[i], restriction)
+            route += r 
+            restriction = restr
+            print(f"Route {i}: {r}")
+
+#FIXME: Afegir un mode 'simulació'. Et permet moure el punt d'origen com si et moguessis a la vida
+#       real i fa desapareixer linees que ja has recorregut. Una vegada s'afegeixi això, podem intentar implementar
+#       la connexió a Instagram
         if route:
             self.map_painter.set_map('assets/map.png')
             self.map_painter.set_route(self.g.route_to_coords(route))
             self.map_painter.paint_map('assets/result_map.png')
             self.label.setPixmap(QtGui.QPixmap('assets/result_map.png'))
-
         else:
-            print("There's no route")
+            print("ERROR: Empty route!")
 
-    def calculate_route(self):
-        pass
 
     def change_mode(self):
         if self.cb.currentText() == 'Camí':

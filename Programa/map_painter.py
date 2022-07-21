@@ -41,6 +41,16 @@ class MapPainter:
         draw = ImageDraw.Draw(self.image)
         draw.line(self.points, fill=color, width=2)
         self.image.save(save_path)
+
+    def paint_map_route(self, route):
+        draw = ImageDraw.Draw(self.image)
+        i = 0
+        for p in route:
+            draw.line(p, fill=(255,0,0), width=2)
+            i += 1
+        
+        self.image.save(f"result_Map.png")
+
     
     def paint_points(self, pos: tuple[float,float], r: int):
         x,y = pos

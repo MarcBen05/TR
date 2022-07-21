@@ -17,7 +17,7 @@ class Graph:
         self.weight = {int:{int:float}}
 
         self.vertex_coord = {}
-        # 1->Monument, 2->Museu, 3-> Lloc emblematic, 4->Parc 5->Oci nocturn, 6->Lloc popular insta, 7->Exposicions, 8->Atraccions turistiques
+        # 1->Monument, 2->Museu, 3-> Lloc emblematic, 4->Parc, 5->Oci nocturn, 6->Lloc popular insta, 7->Exposicions, 8->Atraccions turistiques
         self.vertex_caract = {}
 
         #Based on the data(pos) in the csv file, we can know how many vertices there are, their positions and initislize
@@ -63,6 +63,7 @@ class Graph:
 
     def find_vertices_with_tag(self, tag: str):
         vertices = []
+
         for k in self.vertex_caract.keys():
             if self.vertex_caract[k]:
                 for i in self.vertex_caract[k]:
@@ -82,7 +83,7 @@ class Graph:
         return vertices
 
 
-#FIXME: ALGORITME RUTA (UTILITZARÀ A*): SELECCIONES EL TIPUS DE LLOC QUE VOLS VISITAR
+#FIXME: ALGORITME RUTA (UTILITZARÀ Dijkstra): SELECCIONES EL TIPUS DE LLOC QUE VOLS VISITAR
 #       TROBA ELS VÈRTEXS QUE COMPLEIXIN AQUESTA CONDICIÓ I BUSCA EL CAMÍ MÉS CURT
 #       ENTRE ELLS I ELS UNEIX (DONARÀ COM A RESULTAT EL CAMÍ MÉS CURT D'UN EXTREM A UN ALTRE PASSANT PER TOTS ELS MARCATS)
 #       POSTERIORMENT, BUSCA EL CAMÍ MÉS CURT ENTRE LA TEVA POSICIÓ I UN VÈRTEX EXTREM I L'ADHEREIX A LA RUTA
@@ -90,54 +91,98 @@ class Graph:
 #FIXME: Carregar dos grafs inicialment: cotxe(dirigit) i peu(simple). Depenent de que escolleixi l'usuari,
 #       emprarem un o l'altre
 
-#FIXME: Aquesta funció hauria de tenir el pes de cada aresta en compte
-def h_test(v: tuple[float, float], goal: tuple[float, float]) -> float:
-    x1, y1 = v
-    x2, y2 = goal
-    return ((x2-x1)**2+(y2-y1)**2)**0.5
+def extract_minimum(q, dist):
+    v = 0
+    prev_dist = INFINITY
+    for w in q:
+        if dist[w] < prev_dist:
+            prev_dist = dist[w]
+            v = w
+    q.remove(v)
+    return v
 
-def reconstruct_path(comeFrom: dict[int:int], current: int) -> list[int]:
-    total_path = [current]
-    while current in comeFrom.keys():
-        current = comeFrom[current]
-        total_path.append(current)
-    total_path.reverse()
-    return total_path
+def Dijkstra(g:Graph, src: int, goal: int) -> tuple[list[int], float]:
+    dist = {}
+    visited = {}
+    parent = {}
+    q = []
 
-def extract_minimum(openSet: list[int], fScore: dict[int:float]) -> int:
-    min_val = 0
-    min_score = INFINITY
-    for i in openSet:
-        if (fScore[i] < min_score):
-            min_val = i
-            min_score = fScore[i]
-    return min_val
+    for i in g.edges.keys():
+        dist[i] = INFINITY
+        parent[i] = 0
+        visited[i] = False
+    dist[src] = 0
+    q.append(src)
+    visited[src] = True
 
-def A_Star(g: Graph, src: int, goal: int, h=h_test) -> list[int]:
-    openSet = [src]
-    comeFrom = {}
-    gScore = {}
-    fScore = {}
-    for i in range(1,g.vertices+1):
-        gScore[i] = INFINITY
-        fScore[i] = INFINITY
-    gScore[src] = 0
-    fScore[src] = h(g.vertex_coord[src], g.vertex_coord[goal])
+    while q:
+        v = extract_minimum(q, dist)
+        visited[v] = True
 
-    while openSet:
-        current = extract_minimum(openSet, fScore)
-        if current == goal:
-            return reconstruct_path(comeFrom, current)
-        openSet.remove(current)
-        for w in g.edges[current]:
-            tentative_gScore = gScore[current]+g.weight[current][w]
-            if tentative_gScore < gScore[w]:
-                comeFrom[w] = current
-                gScore[w] = tentative_gScore
-                fScore[w] = tentative_gScore+h(g.vertex_coord[w], g.vertex_coord[goal])
-                if not w in openSet:
-                    openSet.append(w)
-    return []
+        if (v == goal):
+            weight = dist[goal]
+            path = []
+            u = v
+            if parent[u] != 0 or u == src:
+                while u != 0:
+                    path.insert(0, u)
+                    u = parent[u]
+            return (path, weight)
+
+        for w in g.edges[v]:
+            if visited[w] == False:
+                if dist[w] > dist[v] + g.weight[v][w]: #Les llistes son base comencen per 0 i w comença per 1
+                    dist[w] = dist[v] + g.weight[v][w]
+                    parent[w] = v
+                    q.append(w)
+    return ([], 0)
+
+#region Dijkstra_Restricted
+def Dijkstra_Restricted(g:Graph, src: int, goal: int, restriction:dict) -> tuple[list[int], float, dict]:
+    dist = {}
+    visited = {}
+    parent = {}
+    q = []
+
+    for i in g.edges.keys():
+        dist[i] = INFINITY
+        parent[i] = 0
+        visited[i] = False
+
+    if len(restriction) != 0:
+        for i in restriction.keys():
+            visited[i] = restriction[i]
+    
+    dist[src] = 0
+    q.append(src)
+    visited[src] = True
+
+    while q:
+        v = extract_minimum(q, dist)
+        visited[v] = True
+
+        if (v == goal):
+            weight = dist[goal]
+            path = []
+            u = v
+            if parent[u] != 0 or u == src:
+                while u != 0:
+                    path.insert(0, u)
+                    u = parent[u]
+            restr = {}
+            for i in path:
+                restr[i]=True
+            return (path, weight, restr)
+
+        for w in g.edges[v]:
+            if visited[w] == False:
+                if dist[w] > dist[v] + g.weight[v][w]: #Les llistes son base comencen per 0 i w comença per 1
+                    dist[w] = dist[v] + g.weight[v][w]
+                    parent[w] = v
+                    q.append(w)
+    return ([], 0, {})
+
+#endregion
 
 """
 API EXAMPLE
@@ -154,11 +199,4 @@ for i in range(1,g.vertices+1):
         g.set_node_pos(i, i, 0)
     else:
         g.set_node_pos(i, i, 1)
-
-print(A_Star(g,2,6,h))
 """
-g = Graph()
-dist_coord = (abs(g.vertex_coord[110][0] - g.vertex_coord[144][0]), abs(g.vertex_coord[110][1] - g.vertex_coord[144][1]))
-x, y = dist_coord
-pixel_per_unit = (x**2+y**2)**0.5
-print(f"Pixel per unit: {pixel_per_unit}")
