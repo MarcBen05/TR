@@ -14,7 +14,7 @@ class MapPainter:
 
     def coord_to_img(self, x: float, y:float ) -> tuple[float,float]:
         #https://gamedev.stackexchange.com/questions/33441/how-to-convert-a-number-from-one-min-max-set-to-another-min-max-set/33445
-        x_conv = abs(((x-self.lat[0])/(self.lat[1]-self.lat[0]))*(self.image.size[0]))
+        x_conv = (x-self.lat[1])/(self.lat[0]-self.lat[1])*self.image.size[0]
         y_conv = ((y-self.lon[0])/(self.lon[1]-self.lon[0]))*(self.image.size[1])
 
         return x_conv, y_conv
@@ -23,7 +23,7 @@ class MapPainter:
         #https://gamedev.stackexchange.com/questions/33441/how-to-convert-a-number-from-one-min-max-set-to-another-min-max-set/33445
         #Result := ((Input - InputLow) / (InputHigh - InputLow)) * (OutputHigh - OutputLow) + OutputLow;
         
-        x_conv = abs(((x-0)/(1006-0))*(self.lat[1]-self.lat[0])+self.lat[0])
+        x_conv = ((x-0)/(1006-0))*(self.lat[0]-self.lat[1])+self.lat[1]
         y_conv = ((y-0)/(749-0))*(self.lon[1]-self.lon[0])+self.lon[0]
 
         return x_conv, y_conv

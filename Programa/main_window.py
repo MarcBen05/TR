@@ -260,6 +260,7 @@ class Ui_MainWindow(object):
         path, w = Dijkstra(self.g, originVertex, goalVertex)
 
         if path:
+            print(path)
             self.map_painter.set_map('assets/map.png')
             self.map_painter.set_route(self.g.route_to_coords(path))
             self.map_painter.paint_map('assets/result_map.png')
@@ -324,9 +325,6 @@ class Ui_MainWindow(object):
             restriction = restr
             print(f"Route {i}: {r}")
 
-#FIXME: Afegir un mode 'simulació'. Et permet moure el punt d'origen com si et moguessis a la vida
-#       real i fa desapareixer linees que ja has recorregut. Una vegada s'afegeixi això, podem intentar implementar
-#       la connexió a Instagram
         if route:
             self.map_painter.set_map('assets/map.png')
             self.map_painter.set_route(self.g.route_to_coords(route))

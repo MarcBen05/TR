@@ -4,7 +4,7 @@ import numpy as np
 INFINITY = 2.0**50.0
 
 class Graph:
-    def __init__(self, v_data_path="vertexs.csv", e_data_path="arestes.csv"):
+    def __init__(self, v_data_path="vertexs.csv", e_data_path="arestes.csv", mode="img"):
         data = pd.read_csv(v_data_path, names=['LATITUD', 'LONGITUD', 'CATEGORIA'], sep=",", comment="#")
         data['CATEGORIA'] = data['CATEGORIA'].astype('|S')
         vertex_data = tuple(zip(data['LATITUD'].values, data['LONGITUD'].values, data['CATEGORIA'].values))
