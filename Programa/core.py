@@ -4,7 +4,7 @@ import numpy as np
 INFINITY = 2.0**50.0
 
 class Graph:
-    def __init__(self, v_data_path="vertexs.csv", e_data_path="arestes.csv", mode="img"):
+    def __init__(self, v_data_path="vertexs.csv", e_data_path="arestes.csv"):
         data = pd.read_csv(v_data_path, names=['LATITUD', 'LONGITUD', 'CATEGORIA'], sep=",", comment="#")
         data['CATEGORIA'] = data['CATEGORIA'].astype('|S')
         vertex_data = tuple(zip(data['LATITUD'].values, data['LONGITUD'].values, data['CATEGORIA'].values))
@@ -12,7 +12,7 @@ class Graph:
         data_edge = pd.read_csv(e_data_path, names=['ORIGEN', 'DESTI', 'PES'], sep=",", comment="#")
         edge_data = tuple(zip(data_edge['ORIGEN'].values, data_edge['DESTI'].values, data_edge['PES'].values))
         
-        self.vertices = int(data.size/2) #It is a tuple, so data is 2n but the vertex count is n
+        self.vertices = int(data.size/3) #It is a tuple, so data is 3n but the vertex count is n
         self.edges = {int:list[int]}
         self.weight = {int:{int:float}}
 
@@ -61,7 +61,7 @@ class Graph:
             coord.append(self.vertex_coord[i])
         return coord
 
-    def find_vertices_with_tag(self, tag: str):
+    def find_vertices_with_tag(self, tag: str) -> list[int]:
         vertices = []
 
         for k in self.vertex_caract.keys():
@@ -72,7 +72,7 @@ class Graph:
 
         return vertices
 
-    def find_vertices_with_tags(self, tags: list[str]):
+    def find_vertices_with_tags(self, tags: list[str]) -> list[int]:
         vertices = []
         subset = set(tags)
         for k in self.vertex_caract.keys():
@@ -200,3 +200,6 @@ for i in range(1,g.vertices+1):
     else:
         g.set_node_pos(i, i, 1)
 """
+
+g = Graph()
+print(g.vertices)

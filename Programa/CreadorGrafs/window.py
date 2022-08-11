@@ -70,6 +70,7 @@ class Ui_MainWindow(object):
         self.g = Graph()
         self.g_val = list(self.g.vertex_coord.values())
 
+#region si
         self.button1 = QtWidgets.QPushButton(self.centralwidget)
         self.button1.clicked.connect(self.button1_clicked)
         self.button1.setObjectName('1')
@@ -1565,6 +1566,9 @@ class Ui_MainWindow(object):
         self.button299.setObjectName('299')
         self.button299.move(130,497)
 
+
+#endregion
+
         self.textEdit.setText('1')
 
 
@@ -1583,6 +1587,7 @@ class Ui_MainWindow(object):
         x1, y1 = self.map_painter.img_to_coord(x, y)
         print(f"{x1}, {y1}")
         print(f"{round(x1,6)}, {round(y1,6)}")
+        print(cv)
         return
         #"""
         f = open("vertexs.csv", "a")
