@@ -22,9 +22,8 @@ class MapPainter:
     def img_to_coord(self, x: float, y: float) -> tuple[float,float]:
         #https://gamedev.stackexchange.com/questions/33441/how-to-convert-a-number-from-one-min-max-set-to-another-min-max-set/33445
         #Result := ((Input - InputLow) / (InputHigh - InputLow)) * (OutputHigh - OutputLow) + OutputLow;
-        
-        x_conv = ((x-0)/(1006-0))*(self.lat[0]-self.lat[1])+self.lat[1]
-        y_conv = ((y-0)/(749-0))*(self.lon[1]-self.lon[0])+self.lon[0]
+        x_conv = ((x-0)/(self.image.size[0]-0))*(self.lat[0]-self.lat[1])+self.lat[1]
+        y_conv = ((y-0)/(self.image.size[1]-0))*(self.lon[1]-self.lon[0])+self.lon[0]
 
         return x_conv, y_conv
 
@@ -52,7 +51,7 @@ class MapPainter:
         self.image.save(f"result_Map.png")
 
     
-    def paint_points(self, pos: tuple[float,float], r: int):
+    def paint_point(self, pos: tuple[float,float], r: int):
         x,y = pos
         draw = ImageDraw.Draw(self.image)
         draw.ellipse((x-r,y-r,x+r,y+r),fill="blue")

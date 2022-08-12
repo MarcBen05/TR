@@ -63,13 +63,3 @@ for d in graph_data:
     i = i + 1
 #"""
 f.close()
-
-#TODO: Afegir una seleccio de graph simple o dirigit al creador de grafs i posar
-#en les connexions 1->2,2->1 si es simple, 1->2 només si es dirigit
-
-"""
-if self.cb.currentText() == "Dirigit":
-
-else:
-
-"""

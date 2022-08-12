@@ -174,10 +174,6 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))       
 
 
-    #Aquesta funció et permet marcar les interseccions (vertex del graf) al mapa
-    #i ho escriu a un archiu .csv per a que després el programa 'metaprogram.py'
-    #et doni el codi per els botons i les seves funcions. Aquests t'ajudaran a indicar
-    #arestes i els seus pesos
     def mouseReleased(self, QMouseEvent):
         if QMouseEvent.button() != QtCore.Qt.MouseButton.LeftButton:
             return
