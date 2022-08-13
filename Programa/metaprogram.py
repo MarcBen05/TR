@@ -4,8 +4,7 @@ data = pd.read_csv('vertexs.csv', names=['LATITUD', 'LONGITUD'], sep=",", commen
 graph_data = tuple(zip(data['LATITUD'].values, data['LONGITUD'].values))
 
 
-f = open("test.py", "w")
-"""
+f = open("output.py", "w")
 i = 1
 for d in graph_data:
     x,y = d
@@ -19,7 +18,6 @@ for d in graph_data:
     i += 1
 f.write("\n")
 
-"""
 i = 1
 for d in graph_data:
     x,y = d
@@ -61,5 +59,5 @@ for d in graph_data:
     f.write("\n")
 
     i = i + 1
-#"""
+    
 f.close()
