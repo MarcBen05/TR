@@ -1,10 +1,13 @@
 import pandas as pd
 import numpy as np
+import os
+
+client_path = os.path.dirname(os.path.realpath(__file__))
 
 INFINITY = 2.0**50.0
 
 class Graph:
-    def __init__(self, v_data_path="vertexs.csv", e_data_path="arestes.csv"):
+    def __init__(self, v_data_path=f"{str(client_path)}\\vertexs.csv", e_data_path=f"{str(client_path)}\\arestes.csv"):
         data = pd.read_csv(v_data_path, names=['LATITUD', 'LONGITUD', 'CATEGORIA'], sep=",", comment="#")
         data['CATEGORIA'] = data['CATEGORIA'].astype('|S')
         vertex_data = tuple(zip(data['LATITUD'].values, data['LONGITUD'].values, data['CATEGORIA'].values))
@@ -200,6 +203,3 @@ for i in range(1,g.vertices+1):
     else:
         g.set_node_pos(i, i, 1)
 """
-
-g = Graph()
-print(g.vertices)
