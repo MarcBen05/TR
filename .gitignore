@@ -8,3 +8,5 @@ Programa/map.png
 Programa/*.png
 Programa/output.py
 Programa/main_window.ui
+Programa/__pycache__/*
+Programa/CreadorGrafs/*
