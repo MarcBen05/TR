@@ -16,7 +16,7 @@ Alou és un prototip de GPS per al meu treball de recerca que intenta apelar mé
   <img src="/Imatges/App.PNG"/>
 </p>
 
-## Instal·lació
+## Instal·lació i execució
 En cas de voler descarregar el programa, els arxius essencials es troben a la carpeta 'Programa'. A més, són necessàries algunes llibreries de Python i, obviament, és necessari que Python (3.9) estigui instal·lat al dispositiu en que s'executi.
 
 ### Llibreries necessàries
@@ -25,3 +25,8 @@ En cas de voler descarregar el programa, els arxius essencials es troben a la ca
  - Pandas https://https://pypi.org/project/pandas/
  - Pillow https://pypi.org/project/pillow/
  - os *(Ja està instal·lat als dispotitius)*
+ 
+ Una vegada que **Alou** i les llibreries estiguin instal·lats, només cal obrir la terminal i executar el següent comandament:
+ ```
+ py main.py
+ ```
