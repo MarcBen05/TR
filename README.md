@@ -16,6 +16,8 @@ Alou és un prototip de GPS per al meu treball de recerca que intenta apel·lar 
   <img src="/Imatges/App.PNG"/>
 </p>
 
+> Interfície gràfica d'**Alou**
+
 ## Instal·lació i execució
 En cas de voler descarregar el programa, els arxius essencials es troben a la carpeta 'Programa'. A més, són necessàries algunes llibreries de Python i, òbviament, és necessari que Python (3.9) estigui instal·lat al dispositiu en què s'executi.
 
