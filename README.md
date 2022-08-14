@@ -24,6 +24,7 @@ En cas de voler descarregar el programa, els arxius essencials es troben a la ca
 ### Llibreries necessàries
  - PyQt5 https://pypi.org/project/PyQt5/
  - PySide2 https://pypi.org/project/PySide2/
+ - NumPy https://pypi.org/project/numpy
  - Pandas https://https://pypi.org/project/pandas/
  - Pillow https://pypi.org/project/pillow/
  - os *(Ja està instal·lat als dispotitius)*
