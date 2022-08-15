@@ -85,12 +85,6 @@ class Graph:
 
         return vertices
 
-
-#FIXME: ALGORITME RUTA (UTILITZARÀ Dijkstra): SELECCIONES EL TIPUS DE LLOC QUE VOLS VISITAR
-#       TROBA ELS VÈRTEXS QUE COMPLEIXIN AQUESTA CONDICIÓ I BUSCA EL CAMÍ MÉS CURT
-#       ENTRE ELLS I ELS UNEIX (DONARÀ COM A RESULTAT EL CAMÍ MÉS CURT D'UN EXTREM A UN ALTRE PASSANT PER TOTS ELS MARCATS)
-#       POSTERIORMENT, BUSCA EL CAMÍ MÉS CURT ENTRE LA TEVA POSICIÓ I UN VÈRTEX EXTREM I L'ADHEREIX A LA RUTA
-
 #FIXME: Carregar dos grafs inicialment: cotxe(dirigit) i peu(simple). Depenent de que escolleixi l'usuari,
 #       emprarem un o l'altre
 

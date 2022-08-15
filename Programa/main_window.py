@@ -275,11 +275,8 @@ class Ui_MainWindow(object):
         if self.originVertex == 0 or self.goalVertex == 0:
             return
 
-        originVertex = self.originVertex
-        goalVertex = self.goalVertex
-
-        #Els pesos no són utilitzats en aquest lloc, però serà útil per al pròxim
-        path, w = Dijkstra(self.g, originVertex, goalVertex)
+        #Els pesos no són utilitzats en aquest lloc, però serà útil per a les rutes
+        path, w = Dijkstra(self.g, self.originVertex, self.goalVertex)
 
         if path:
             self.map_painter.set_map(str(client_path)+'\\assets\\map.png')

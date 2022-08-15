@@ -10,3 +10,7 @@ Programa/output.py
 Programa/main_window.ui
 Programa/__pycache__/*
 Programa/CreadorGrafs/*
+Programa/main_window_test.py
+Programa/connection.csv
+Programa/assets/*.xcf
+Programa/assets/indicador_test.png
