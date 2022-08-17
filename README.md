@@ -1,6 +1,6 @@
 <p align="center">
   <img src="/Programa/assets/logo.png" alt="drawing" width="75"/>
-  <h1 align="center">Alou (Nom subjecte a canvis)</h1>
+  <h1 align="center">Alou</h1>
 </p>
 
 [![Python 3.9](https://img.shields.io/badge/python-3.9-yellow.svg)](https://www.python.org/)

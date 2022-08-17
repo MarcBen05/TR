@@ -301,10 +301,7 @@ class Ui_MainWindow(object):
                 routeCaract = '3'
         else:
                 routeCaract = '4'
-        
-        #Dict key is vertex
-        dist = {}
-        routes = {}
+    
 
         taggedVertices = self.g.find_vertices_with_tag(routeCaract)
 
@@ -313,6 +310,9 @@ class Ui_MainWindow(object):
             print(f"INFO: caract: {routeCaract}, origin: {originVertex}")
             return
 
+        #Dict key is vertex
+        dist = {}
+        routes = {}
         routeList = []
         routeList.append(originVertex)
 
