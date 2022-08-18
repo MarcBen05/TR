@@ -14,3 +14,7 @@ Programa/main_window_test.py
 Programa/connection.csv
 Programa/assets/*.xcf
 Programa/assets/indicador_test.png
+Imatges/*
+!Imatges/App.PNG
+!Imatges/App2.PNG
+!Imatges/logo.png
