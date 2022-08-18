@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="/Programa/assets/logo.png" alt="drawing" width="75"/>
+  <img src="Imatges/logo.png" alt="drawing" width="75"/>
   <h1 align="center">Alou</h1>
 </p>
 
