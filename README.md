@@ -19,7 +19,13 @@ Alou és un prototip de GPS per al meu treball de recerca que intenta apel·lar 
 > Interfície gràfica d'**Alou**.
 
 ## Instal·lació i execució
-En cas de voler descarregar el programa, els arxius essencials es troben a la carpeta 'Programa'. A més, són necessàries algunes llibreries de Python i, òbviament, és necessari que Python (3.9) estigui instal·lat al dispositiu en què s'executi.
+Primerament, s'ha de clonar el repistori en una carpeta. Això es fa descarregant el repositori manualment o mitjançant el comandament següent a la terminal:
+```
+git clone https://www.github.com/MarcBen05/TR
+```
+> En cas d'emprar el comandament anterior, es requereix l'eina *Git*.
+
+Per als usuaris de Windows, una vegada descarregat el repositori no cal instal·lar cap eina externa. Només que s'obri la carpeta anomenada *Executable* i s'executi el programa *Alou.exe* aquest funcionarà. En el cas dels usuaris de Linux, aquests hauran de descarregar-se Python (3.9) i les llibreries llistades a baix.
 
 ### Llibreries necessàries
  - PyQt5 https://pypi.org/project/PyQt5/
@@ -27,14 +33,9 @@ En cas de voler descarregar el programa, els arxius essencials es troben a la ca
  - NumPy https://pypi.org/project/numpy
  - Pandas https://https://pypi.org/project/pandas/
  - Pillow https://pypi.org/project/pillow/
- - os *(Ja està instal·lat als dispotitius)*
+ - sys *(Ja està instal·lat als dispotitius)*
  
- Una vegada que **Alou** i les llibreries estiguin instal·lats, només cal obrir la terminal i executar els següents comandaments:
- ```
- py main.py
- ```
- > Comandament al sistema operatiu *Windows*.
- 
+ Una vegada que **Alou** i les llibreries estiguin instal·lats, només cal obrir la terminal i executar el següent comandament:
  ```
  python3 main.py
  ```
