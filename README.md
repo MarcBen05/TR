@@ -16,7 +16,7 @@ Alou és un prototip de GPS per al meu treball de recerca que intenta apel·lar 
   <img src="/Imatges/App.PNG"/>
 </p>
 
-> Interfície gràfica d'**Alou**
+> Interfície gràfica d'**Alou**.
 
 ## Instal·lació i execució
 En cas de voler descarregar el programa, els arxius essencials es troben a la carpeta 'Programa'. A més, són necessàries algunes llibreries de Python i, òbviament, és necessari que Python (3.9) estigui instal·lat al dispositiu en què s'executi.
@@ -29,7 +29,13 @@ En cas de voler descarregar el programa, els arxius essencials es troben a la ca
  - Pillow https://pypi.org/project/pillow/
  - os *(Ja està instal·lat als dispotitius)*
  
- Una vegada que **Alou** i les llibreries estiguin instal·lats, només cal obrir la terminal i executar el següent comandament:
+ Una vegada que **Alou** i les llibreries estiguin instal·lats, només cal obrir la terminal i executar els següents comandaments:
  ```
  py main.py
  ```
+ > Comandament al sistema operatiu *Windows*.
+ 
+ ```
+ python3 main.py
+ ```
+ > Comandament al sistema operatiu *Linux*.
