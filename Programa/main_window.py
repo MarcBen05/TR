@@ -11,10 +11,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from map_painter import MapPainter
 from core import *
-import os
-
-client_path = os.path.dirname(os.path.realpath(__file__))
-
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -30,13 +26,13 @@ class Ui_MainWindow(object):
 "border-width:1.5px;\n"
 "border-color:rgb(176, 176, 176)")
         self.mapa.setText("")
-        self.mapa.setPixmap(QtGui.QPixmap(str(client_path)+"\\assets\\map.png"))
+        self.mapa.setPixmap(QtGui.QPixmap("assets/map.png"))
         self.mapa.setScaledContents(True)
         self.mapa.setObjectName("mapa")
         self.mapa_peque = QtWidgets.QLabel(self.centralwidget)
         self.mapa_peque.setGeometry(QtCore.QRect(1030, 540, 131, 101))
         self.mapa_peque.setText("")
-        self.mapa_peque.setPixmap(QtGui.QPixmap(str(client_path)+"\\assets\\undraw_map_dark_re_36sy.svg"))
+        self.mapa_peque.setPixmap(QtGui.QPixmap("assets/undraw_map_dark_re_36sy.svg"))
         self.mapa_peque.setScaledContents(True)
         self.mapa_peque.setObjectName("mapa_peque")
         self.modeComboBox = QtWidgets.QComboBox(self.centralwidget)
@@ -64,13 +60,13 @@ class Ui_MainWindow(object):
         self.originButton.setStyleSheet("")
         self.originButton.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(str(client_path)+"\\assets\\marcar_localitzacio.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("assets/marcar_localitzacio.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.originButton.setIcon(icon)
         self.originButton.setObjectName("originButton")
         self.Logo = QtWidgets.QLabel(self.centralwidget)
         self.Logo.setGeometry(QtCore.QRect(1040, 20, 111, 111))
         self.Logo.setText("")
-        self.Logo.setPixmap(QtGui.QPixmap(str(client_path)+"\\assets\\logo.png"))
+        self.Logo.setPixmap(QtGui.QPixmap("assets/logo.png"))
         self.Logo.setScaledContents(True)
         self.Logo.setObjectName("Logo")
         self.nombre = QtWidgets.QLabel(self.centralwidget)
@@ -160,7 +156,7 @@ class Ui_MainWindow(object):
         self.pinLabel.setGeometry(QtCore.QRect(0,0,16,26))
         self.pinLabel.setText("")
         self.pinLabel.setObjectName("pinLabel")
-        self.pinLabel.setPixmap(QtGui.QPixmap(str(client_path)+"\\assets\\marcador.png"))
+        self.pinLabel.setPixmap(QtGui.QPixmap("assets/marcador.png"))
         self.pinLabel.hide()
 
         #Indicador per a l'origen
@@ -169,11 +165,11 @@ class Ui_MainWindow(object):
         self.circleLabel.setGeometry(QtCore.QRect(0,0,16,16))
         self.circleLabel.setText("")
         self.circleLabel.setObjectName("circleLabel")
-        self.circleLabel.setPixmap(QtGui.QPixmap(str(client_path)+"\\assets\\indicador.png"))
+        self.circleLabel.setPixmap(QtGui.QPixmap("assets/indicador.png"))
         self.circleLabel.hide()
 
         # 0 = Cami; 1 = Ruta
-        self.map_painter = MapPainter(str(client_path)+'\\assets\\map.png')
+        self.map_painter = MapPainter('assets/map.png')
 
         #self.mode = self.modeComboBox.currentIndex()
 
@@ -197,7 +193,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Alou"))
-        MainWindow.setWindowIcon(QtGui.QIcon(str(client_path)+'\\assets\\logo.png'))
+        MainWindow.setWindowIcon(QtGui.QIcon('assets/logo.png'))
         self.modeComboBox.setItemText(0, _translate("MainWindow", "Camins"))
         self.modeComboBox.setItemText(1, _translate("MainWindow", "Ruta"))
         self.modeLabel.setText(_translate("MainWindow", "Mode:"))
@@ -245,7 +241,7 @@ class Ui_MainWindow(object):
             self.pinLabel.move(x-(w/2.0),y-h)
             self.pinLabel.show()
 
-            self.goalCoord.setText(f"Lat:{round(oLat,4)}\nLon: {round(oLon,4)}")
+            self.goalCoord.setText(f"Lat: {round(oLat,4)}\nLon: {round(oLon,4)}")
             self.firstClick = True
             self.goalVertex = cv
 
@@ -258,7 +254,7 @@ class Ui_MainWindow(object):
         self.firstClick = False
 
     def reset_route(self):
-        self.mapa.setPixmap(QtGui.QPixmap(str(client_path)+'\\assets\\map.png'))
+        self.mapa.setPixmap(QtGui.QPixmap('assets/map.png'))
         self.pinLabel.hide()
         self.circleLabel.hide()
         
@@ -269,7 +265,7 @@ class Ui_MainWindow(object):
         self.originVertex = 0
         self.goalVertex = 0
 
-        self.map_painter.set_map(str(client_path)+'\\assets\\map.png')
+        self.map_painter.set_map('assets/map.png')
 
     def calculate_path(self):
         if self.originVertex == 0 or self.goalVertex == 0:
@@ -279,10 +275,10 @@ class Ui_MainWindow(object):
         path, w = Dijkstra(self.g, self.originVertex, self.goalVertex)
 
         if path:
-            self.map_painter.set_map(str(client_path)+'\\assets\\map.png')
+            self.map_painter.set_map('assets/map.png')
             self.map_painter.set_route(self.g.route_to_coords(path))
-            self.map_painter.paint_map(str(client_path)+'\\assets\\result_map.png')
-            self.mapa.setPixmap(QtGui.QPixmap(str(client_path)+'\\assets\\result_map.png'))
+            self.map_painter.paint_map('assets/result_map.png')
+            self.mapa.setPixmap(QtGui.QPixmap('assets/result_map.png'))
 
         else:
             print("There's no route!")
@@ -348,10 +344,10 @@ class Ui_MainWindow(object):
             restriction = restr
 
         if route:
-            self.map_painter.set_map(str(client_path)+'\\assets\\map.png')
+            self.map_painter.set_map('assets/map.png')
             self.map_painter.set_route(self.g.route_to_coords(route))
-            self.map_painter.paint_map(str(client_path)+'\\assets\\result_map.png')
-            self.mapa.setPixmap(QtGui.QPixmap(str(client_path)+'\\assets\\result_map.png'))
+            self.map_painter.paint_map('assets/result_map.png')
+            self.mapa.setPixmap(QtGui.QPixmap('assets/result_map.png'))
         else:
             print("ERROR: Empty route!")
 
