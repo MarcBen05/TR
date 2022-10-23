@@ -1,4 +1,4 @@
-#Es crea un graf de 6 vertexs. (Aquets graf es en forma de llista d'adjacencia)
+#Es crea un graf de 6 vertexs. (Aquest graf es en forma de llista d'adjacencia)
 graph = {}
 graph[1] = {2,5}
 graph[2] = {1,3}
