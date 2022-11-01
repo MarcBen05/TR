@@ -15,7 +15,7 @@ Programa/connection.csv
 Programa/assets/*.xcf
 Programa/assets/indicador_test.png
 Ampliacio/*
-!Ampliacio/traductor.py
+!Ampliacio/translator.py
 !Ampliacio/get_coords.py
 !Ampliacio/map.png
 !Ampliacio/map.osm
